@@ -32,3 +32,11 @@ if ($mysqli->connect_error){
 //}
 
 //$mysqli->real_escape_string();
+
+//$q = "SELECT username,email,type FROM users WHERE email='songchaohui@hongzg.com' AND password=sha1('mypass333')";
+//$result = $mysqli->query($q);
+//if ($result->num_rows==1){
+//    var_dump($result->fetch_assoc());
+//}else{
+//    echo 'error';
+//}

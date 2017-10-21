@@ -5,11 +5,10 @@
  * Date: 2017/10/20
  * Time: 15:00
  */
-interface Message
+namespace sys_interface;
+interface MessageIn
 {
-    public function readUserInfo();
-    public function checkUserRights();
-    public function addMessage();
+    public function addMessage($_mysqli);
     public function deleteMessage();
     public function changeMessage();
     public function viewMessage();
