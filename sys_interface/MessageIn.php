@@ -11,5 +11,5 @@ interface MessageIn
     public function addMessage($_mysqli);
     public function deleteMessage();
     public function changeMessage();
-    public function viewMessage();
+    public static function viewMessage(UserIn $_user,$_viewUid,$_mysqli);
 }

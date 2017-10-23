@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    <title>请登录</title>
+    <script src="../lib/jquery-3.2.1.min.js"></script>
+    <script src="../lib/vue/vue.js"></script>
+    <link rel="stylesheet" href="../lib/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../lib/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
+    <script src="../lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+<body>
+<div class="container site-title">
+    <div class="row">
+        <h1 class="col-md-12">请登录</h1>
+    </div>
+</div>
+
+<div class="container form-box" id="login-box">
+    <div class="row">
+        <form class="col-md-12" v-on:submit.prevent="login">
+            <div class="form-group">
+                <label for="email">邮箱：</label>
+                <input type="email" class="form-control" id="email" placeholder="请输入邮件地址" name="email" v-model="email">
+            </div>
+            <div class="form-group">
+                <label for="password">密码：</label>
+                <input name="password" type="password" class="form-control" id="password" placeholder="请输入密码" v-model="pass">
+            </div>
+            <button type="submit" class="btn btn-default">登录</button>
+        </form>
+    </div>
+    <p>{{email}} {{pass}}</p>
+</div>
+<script>
+    var loginBox = new Vue({
+        el:'#login-box',
+        data:{
+            email:'',
+            pass:''
+        },
+        methods:{
+            login:function () {
+                var _self = this;
+                $.ajax({
+                    url:'http://localhost/workDailySys/user/login.php',
+                    type:'POST',
+                    dataType:'json',
+                    data:{email:_self.email,pass:_self.pass},
+                    beforeSend:function(){
+                        console.log(_self);
+                    },
+                    success:function(response){
+                        console.log(response);
+                    }
+                });
+            }
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "name": "workdailysys",
+  "version": "1.0.0",
+  "description": "wordDaily Demo",
+  "main": "gulpfile.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "gf"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/myhui0926/workDailySys.git"
+  },
+  "author": "song",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/myhui0926/workDailySys/issues"
+  },
+  "homepage": "https://github.com/myhui0926/workDailySys#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-connect": "^5.0.0",
+    "gulp-less": "^3.3.2",
+    "gulp-notify": "^3.0.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-sourcemaps": "^2.6.1"
+  }
+}

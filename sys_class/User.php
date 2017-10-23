@@ -61,8 +61,8 @@ class User implements UserIn
             $_mysqli->query($q);
             if ($_mysqli->affected_rows==1){
                 $_mysqli->commit();
-                self::$responseMsg['msg'][] = "注册成功";
                 $_mysqli->autocommit(true);//重新开启自动提交
+                self::$responseMsg['msg'][] = "注册成功";
             }else{
                 $_mysqli->rollback();
                 self::$responseMsg['status'] = false;
@@ -77,7 +77,7 @@ class User implements UserIn
         return self::$responseMsg;
     }
 
-    public function login($_email,$_passwprd,$_mysqli)
+    public static function login($_email,$_password,$_mysqli)
     {
         $errors = array();
         if (isset($_email) && preg_match("/^[\w.-]+@[\w.-]+\.[A-Za-z]{2,6}$/",$_email)){
@@ -86,8 +86,8 @@ class User implements UserIn
             $errors[] = "请输入合法的电子邮件地址";
         }
 
-        if (isset($_passwprd) && preg_match("/^\w{6,16}$/",$_passwprd)){
-            $pa = $_mysqli->real_escape_string(trim($_passwprd));
+        if (isset($_password) && preg_match("/^\w{6,16}$/",$_password)){
+            $pa = $_mysqli->real_escape_string(trim($_password));
         }else{
             $errors[] = "请输入合法的密码";
         }
@@ -118,6 +118,21 @@ class User implements UserIn
         return self::$responseMsg;
     }
 
+    public static function logout()
+    {
+        // TODO: Implement logout() method.
+        session_start();
+        if (!isset($_SESSION['user_id'])){
+            self::redirect_user();
+        }else{
+            $_SESSION = array();//清空会话变量
+            session_destroy();//销毁会话变量本身
+            setcookie('PHPSESSID','',time()-3600,'/','',0,0);
+//            self::redirect_user('user/login.php');
+            echo "您已退出登录";
+        }
+    }
+
     public function readUserInfo()
     {
         // TODO: Implement readUserInfo() method.
@@ -134,7 +149,7 @@ class User implements UserIn
             $this->regis_date = $_SESSION['regis_date'];
         }
     }
-    private static function redirect_user($_path='index.php'){
+    private static function redirect_user($_path='_index.php'){
         //用于自动重定向用户页面
         $url = 'http://'.$_SERVER['HTTP_HOST']."/workDailySys/".$_path;
         var_dump($url);
