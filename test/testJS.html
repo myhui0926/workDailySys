@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var str = "Hello World!";
+    if (str.indexOf('Son')===-1){
+        (function(){
+            console.log('running 1');
+            return false;
+            console.log('runrunrun3');
+        })();
+        console.log('runrunrun3');
+    }
+
+    console.log('runrunrun4');
+</script>
+</body>
+</html>
