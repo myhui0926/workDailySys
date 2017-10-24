@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<html lang="zh-CN" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,6 +12,7 @@
     <script src="../lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 
     <link rel="stylesheet" href="../css/login.css">
+    <script src="../js/login.js"></script>
 </head>
 <body>
 <div class="container site-title">
@@ -34,33 +35,26 @@
             <button type="submit" class="btn btn-default">登录</button>
         </form>
     </div>
-    <p>{{email}} {{pass}}</p>
 </div>
-<script>
-    var loginBox = new Vue({
-        el:'#login-box',
-        data:{
-            email:'',
-            pass:''
-        },
-        methods:{
-            login:function () {
-                var _self = this;
-                $.ajax({
-                    url:'http://localhost/workDailySys/user/login.php',
-                    type:'POST',
-                    dataType:'json',
-                    data:{email:_self.email,pass:_self.pass},
-                    beforeSend:function(){
-                        console.log(_self);
-                    },
-                    success:function(response){
-                        console.log(response);
-                    }
-                });
-            }
-        }
-    })
-</script>
+
+<!--Site Modal -->
+<div class="modal fade" id="siteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{modalHeader}}</h4>
+            </div>
+            <div class="modal-body">
+                <p v-for="item in items">{{item.text}}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" v-bind:class="btn1.classList" data-dismiss="modal" v-if="btn1.show">{{btn1.text}}</button>
+                <button type="button" v-bind:class="btn2.classList" v-if="btn2.show">{{btn2.text}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
