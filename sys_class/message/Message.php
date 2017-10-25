@@ -99,8 +99,8 @@ class Message implements MessageIn
     public static function viewMessage(UserIn $_user,$_viewUid,$_mysqli)
     {
         // TODO: Implement viewMessage() method.
-        if (isset($_user->user_id)){
-            $sql = "SELECT subject AS sbj ,body AS bo FROM message WHERE user = $_viewUid";
+        if (isset($_user->user_id) && is_numeric($_user->user_id) && isset($_viewUid) && is_numeric($_viewUid)){
+            $sql = "SELECT subject AS sbj ,body AS bo FROM message WHERE user = $_viewUid AND parent_id=0";
             $result = $_mysqli->query($sql);
             if ($result->num_rows>0){
                 while($row=$result->fetch_assoc()){

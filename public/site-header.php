@@ -15,22 +15,23 @@
     foreach ($page_css_list as $pcl){
         echo '<link rel="stylesheet" href="'.$pcl.'">';//动态载入所需css资源
     }
-spl_autoload_register(function($_className){
-    $path = str_replace("\\","/",'../'.$_className.".php");
-    require "$path";
-});
-use \sys_class\User;
-$user = new User();
-$user->readUserInfo();
+    require "../mysqli_connect.php";
+    spl_autoload_register(function($_className){
+        $path = str_replace("\\","/",'../'.$_className.".php");
+        require "$path";
+    });
+    use \sys_class\User;
+    $user = new User();
+    $user->readUserInfo();
 ?>
 </head>
 <body>
 <nav  class="container c-nav">
     <div class="row">
         <ul class="col-md-3 nav nav-pills">
-            <li role="presentation" class="active"><a href="#">个人首页</a></li>
+            <li role="presentation" class="active"><a href="_index.php">个人首页</a></li>
             <li role="presentation"><a href="#">查看日报</a></li>
-            <li role="presentation"><a href="#">新建日报</a></li>
+            <li role="presentation"><a href="newDaily.html">新建日报</a></li>
         </ul>
         <div class="col-md-5 col-md-offset-4">
             <div class="row user-info">
