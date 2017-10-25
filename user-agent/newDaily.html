@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>工作日报小demo-新建日报</title>
+    <!--引入项目所需框架库-->
+    <script src="../lib/jquery-3.2.1.min.js"></script>
+    <script src="../lib/vue/vue.js"></script>
+    <link rel="stylesheet" href="../lib/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../lib/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
+    <script src="../lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <link href="../lib/assets/css/font-awesome.css" rel="stylesheet">
+    <!--站点公用样式与功能-->
+    <link rel="stylesheet" href="../css/site-header.css">
+    <script src="../js/readCookie.js"></script>
+    <script src="../js/html_checkLogin.js"></script>
+    <!--此页所需的功能和样式-->
+    <script src="../js/newDaily.js"></script>
+</head>
+
+<body>
+<nav  class="container c-nav" id="nav-html">
+    <div class="row">
+        <ul class="col-md-3 nav nav-pills">
+            <li role="presentation"><a href="_index.php">个人首页</a></li>
+            <li role="presentation"><a href="#">查看日报</a></li>
+            <li role="presentation" class="active"><a href="newDaily.html">新建日报</a></li>
+        </ul>
+        <div class="col-md-5 col-md-offset-4">
+            <div class="row user-info">
+                <p class="col-md-4 col-md-offset-2">登录用户：
+                    <a href="#">{{username}}</a>
+                </p>
+                <a class="col-md-4" href="http://localhost/workDailySys/user/logout.php">退出登录</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container new-daily">
+    <div class="row block-title">
+        <h2 class="col-md-12">新建工作日报</h2>
+    </div>
+    <div class="row editer-content">
+        <div id='pad-wrapper'>
+            <div id="editparent">
+                <div id='editControls' class='span9' style=' padding:5px;'>
+                    <div class='btn-group'>
+                        <a class='btn' data-role='undo' href='#'><i class='icon-undo'></i></a>
+                        <a class='btn' data-role='redo' href='#'><i class='icon-repeat'></i></a>
+                    </div>
+                    <div class='btn-group'>
+                        <a class='btn' data-role='cut' href='#'><i class='icon-cut'></i></a>
+                        <a class='btn' data-role='copy' href='#'><i class='icon-copy'></i></a>
+                        <a class='btn' data-role='paste' href='#'><i class='icon-paste'></i></a>
+                    </div>
+                    <div class='btn-group'>
+                        <a class='btn' data-role='bold' href='#'><b>Bold</b></a>
+                        <a class='btn' data-role='italic' href='#'><em>Italic</em></a>
+                        <a class='btn' data-role='underline' href='#'><u><b>U</b></u></a>
+                        <a class='btn' data-role='strikeThrough' href='#'><strike>abc</strike></a>
+                    </div>
+                    <div class='btn-group'>
+                        <a class='btn' data-role='justifyLeft' href='#'><i class='icon-align-left'></i></a>
+                        <a class='btn' data-role='justifyCenter' href='#'><i class='icon-align-center'></i></a>
+                        <a class='btn' data-role='justifyRight' href='#'><i class='icon-align-right'></i></a>
+                        <a class='btn' data-role='justifyFull' href='#'><i class='icon-align-justify'></i></a>
+                    </div>
+                    <div class='btn-group'>
+                        <a class='btn' data-role='indent' href='#'><i class='icon-indent-right'></i></a>
+                        <a class='btn' data-role='outdent' href='#'><i class='icon-indent-left'></i></a>
+                    </div>
+                    <div class='btn-group'>
+                        <a class='btn' data-role='insertUnorderedList' href='#'><i class='icon-list-ul'></i></a>
+                        <a class='btn' data-role='insertOrderedList' href='#'><i class='icon-list-ol'></i></a>
+                    </div>
+                    <div class='btn-group'>
+                        <a class='btn' data-role='h1' href='#'>h<sup>1</sup></a>
+                        <a class='btn' data-role='h2' href='#'>h<sup>2</sup></a>
+                        <a class='btn' data-role='p' href='#'>p</a>
+                    </div>
+                    <div class='btn-group'>
+                        <a class='btn' data-role='subscript' href='#'><i class='icon-subscript'></i></a>
+                        <a class='btn' data-role='superscript' href='#'><i class='icon-superscript'></i></a>
+                    </div>
+                </div>
+                <div id='editor' class='span9' style='' contenteditable>
+                    <h1>世界上最简单的文本编辑器！</h1>
+                    <p>梦想天空博客关注<b>前端开发</b>技术，分享各种增强网站用户体验的 <b>jQuery</b> 插件，展示前沿的 <b>HTML5</b> 和 <b>CSS3</b> 技术应用，推荐优秀的网页设计案例，共享精美的设计素材和优秀的 <b>Web</b> 开发工具，希望这些精心整理的前端技术文章能够帮助到您。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row btn-content">
+        <button class="btn btn-primary">提交</button>
+        <button class="btn btn-warning">取消</button>
+    </div>
+</div>
+</body>
+</html>

@@ -9,21 +9,27 @@ include '../public/site-header.php';
     <div class="row block-title">
         <h2>工作汇报列表</h2>
     </div>
-    <div class="row block-content">
-        <div class="col-md-4">
-            <h3><span>1</span>Title</h3>
-            <p>使用谷歌浏览器调js问题，发现谷歌浏览器总是缓存之前的js信息，就想禁止浏览器缓存，在网络上找来找去都是之前的版本的谷歌浏览器的设置方法，我的浏览器版本是55.0.2883.87 m的和之前的不同了，后经过摸索找到了方法，如下</p>
-        </div>
-        <div class="col-md-4">
-            <h3><span>2</span>Title</h3>
-            <p>使用谷歌浏览器调js问题，发现谷歌浏览器总是缓存之前的js信息，就想禁止浏览器缓存，在网络上找来找去都是之前的版本的谷歌浏览器的设置方法，我的浏览器版本是55.0.2883.87 m的和之前的不同了，后经过摸索找到了方法，如下</p>
-        </div>
-        <div class="col-md-4">
-            <h3><span>3</span>Title</h3>
-            <p>使用谷歌浏览器调js问题，发现谷歌浏览器总是缓存之前的js信息，就想禁止浏览器缓存，在网络上找来找去都是之前的版本的谷歌浏览器的设置方法，我的浏览器版本是55.0.2883.87 m的和之前的不同了，后经过摸索找到了方法，如下</p>
-        </div>
-    </div>
-</div>
-<?php
+        <?php
+        use sys_class\message\Message;
+        $result = Message::viewMessage($user,1,$mysqli);
+//        var_dump($result);
+//        var_dump(count($result['msg'],COUNT_NORMAL));
+        if ($result['status']){
+            $daily_num = count($result['msg']);
+            foreach ($result['msg'] as $key=>$m){
+                if ($key%3==0){
+                    echo '<div class="row block-content">';
+                }
+                    echo
+                        '<div class="col-md-4">
+                    <h3><span>'.($key+1).'</span>'.$m['sbj'].'</h3>
+                    <p>'.$m['bo'].'</p>
+                    <p><span>3</span>条回复<a href="#">查看</a></p>
+                </div>';
+                if (($key+1)%3==0 || ($key+1)==$daily_num){
+                    echo '</div>';
+                }
+                }
+        }
 include '../public/site-footer.php';
 ?>

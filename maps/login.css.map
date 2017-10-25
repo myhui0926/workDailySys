@@ -1,0 +1,1 @@
+{"version":3,"sources":["login.less"],"names":[],"mappings":"AAAA;EACE,iBAAA;;AADF,WAEE;EACE,kBAAA;;AAIJ;EACE,gBAAA;EACA,cAAA","sourcesContent":[".site-title{\r\n  margin-top: 100px;\r\n  h1{\r\n    text-align: center;\r\n  }\r\n}\r\n\r\n.form-box{\r\n  max-width: 500px;\r\n  margin:0 auto;\r\n}"],"file":"../less/login.css"}
