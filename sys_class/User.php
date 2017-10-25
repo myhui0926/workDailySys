@@ -97,7 +97,10 @@ class User implements UserIn
             $result = $_mysqli->query($q);
             if ($result->num_rows==1){
                 $row = $result->fetch_assoc();//取出数据
-                //取出的数据放入实例会话中
+                //发送一段cookie到客户端进行双向验证：
+                setcookie('user_id',$row['user_id'],0,'/','',0,0);
+                setcookie('username',$row['username'],0,'/','',0,0);
+                //取出的数据放入会话中
                 session_start();
                 $_SESSION['user_id'] = $row['user_id'];
                 $_SESSION['username'] = $row['username'];
@@ -107,7 +110,7 @@ class User implements UserIn
                 self::$responseMsg['msg'][] = "登录成功";
             }else{
                 self::$responseMsg['status'] = false;
-                self::$responseMsg['errors'] = "用户名或密码错误";
+                self::$responseMsg['errors'][] = "用户名或密码错误";
             }
         }else{
             self::$responseMsg['status'] = false;
@@ -121,15 +124,17 @@ class User implements UserIn
     public static function logout()
     {
         // TODO: Implement logout() method.
+        //销毁双向验证cookie：
+        setcookie('user_id','',time()-3600,'/','',0,0);
+        setcookie('username','',time()-3600,'/','',0,0);
         session_start();
         if (!isset($_SESSION['user_id'])){
-            self::redirect_user();
+            self::redirect_user('user/login.html');
         }else{
             $_SESSION = array();//清空会话变量
             session_destroy();//销毁会话变量本身
             setcookie('PHPSESSID','',time()-3600,'/','',0,0);
-//            self::redirect_user('user/login.php');
-            echo "您已退出登录";
+            self::redirect_user('user/login.html');
         }
     }
 
@@ -139,7 +144,7 @@ class User implements UserIn
         session_start();
         if (!isset($_SESSION['user_id'])){
             //如果会话中没有用户信息，重定向用户到登录页面
-            self::redirect_user('user/login.php');
+            self::redirect_user('user/login.html');
         }else{
             //登录成功后，将会话中存储的信息设置为实例的属性：
             $this->user_id = $_SESSION['user_id'];
@@ -149,10 +154,9 @@ class User implements UserIn
             $this->regis_date = $_SESSION['regis_date'];
         }
     }
-    private static function redirect_user($_path='_index.php'){
+    private static function redirect_user($_path='_index.html'){
         //用于自动重定向用户页面
         $url = 'http://'.$_SERVER['HTTP_HOST']."/workDailySys/".$_path;
-        var_dump($url);
         header("Location:$url");
         exit();
     }

@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST'){
     }else{
         $response = array(
             "status"=>false,
-            "errorMsg"=>"参数错误，请重试"
+            "errors"=>array("参数错误，请重试")
         );
     }
     echo json_encode($response);

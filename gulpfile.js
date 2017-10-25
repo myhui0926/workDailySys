@@ -21,13 +21,14 @@ gulp.task('less',function(){
         .pipe(plumber({errorHandler:notify.onError('Error:<%= error.message %>')}))
         .pipe(sourcemaps.init())
         .pipe(less())
-        .pipe(sourcemaps.write())
+        .pipe(sourcemaps.write('../maps'))
         .pipe(gulp.dest('./css'))
         .pipe(connect.reload());
 });
 
 gulp.task('watch',function(){
    gulp.watch('less/*.less',['less']);
+   gulp.watch('js/*.js',['html']);
    gulp.watch('./**/*.html',['html']);
 });
 
