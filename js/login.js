@@ -1,8 +1,8 @@
 $(function(){
     var host = 'http://' + document.domain;
     var allCookiie = document.cookie;
-    if (allCookiie.indexOf("username")!=-1 && allCookiie.indexOf("user_id")){
-        window.location.href = host+"/WorkDailySys/_index.php";
+    if (allCookiie.indexOf("username")!=-1 && allCookiie.indexOf("user_id")!=-1){
+        window.location.href = host+"/WorkDailySys/user-agent/_index.php";
     }else{
         var loginBox = new Vue({
             el:'#login-box',
