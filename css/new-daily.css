@@ -1,0 +1,24 @@
+.new-daily {
+  margin-top: 10px;
+}
+.new-daily .block-title h2 {
+  padding-left: 0;
+}
+.new-daily .editer-content {
+  border: 1px solid #989898;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.new-daily .btn-content button {
+  width: 150px;
+}
+#editor {
+  border: 1px solid #e4e4e4;
+  min-height: 300px;
+  padding: 10px;
+}
+#editControls .btn-group {
+  border-right: 1px solid #dedede;
+}
+
+/*# sourceMappingURL=../maps/new-daily.css.map */

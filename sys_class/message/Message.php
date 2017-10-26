@@ -14,15 +14,15 @@ class Message implements MessageIn
     public $message_id = 0;
     public $parent_id = 0;
     public $user_id = 0;
-    public $body = '';
+    public $primary = '';
     public $send_date = '';
-    private static $responseMsg = array(//需要返回给用户的信息
+    protected static $responseMsg = array(//需要返回给用户的信息
         'status'=>true,
         'errorMsg'=>array(),
         'msg'=>array()
     );
 
-    public function __construct($_parentID,UserIn $_user,$_body,$_mysqli)//这里使用UserIn接口来限制函数的$_user参数必须是实现了UserIn接口的类的实例化对象
+    public function __construct($_parentID,UserIn $_user,$_primary,$_mysqli)//这里使用UserIn接口来限制函数的$_user参数必须是实现了UserIn接口的类的实例化对象
     {
         $errors = array();//用于存储出现的错误信息
         //验证数据的合法性，如果验证通过，将数据赋予实例相对应的属性值
@@ -38,8 +38,8 @@ class Message implements MessageIn
             $errors[] = "数据类型有误，请重试";
         }
 
-        if (isset($_body) && is_string($_body) && mb_strlen($_body)<=1000){
-            $this->body = $_mysqli->real_escape_string(trim(htmlentities($_body,ENT_COMPAT,'UTF-8')));
+        if (isset($_primary) && mb_strlen($_primary,'UTF-8')<1000){
+            $this->primary = $_mysqli->real_escape_string(trim(htmlentities($_primary,ENT_COMPAT,'UTF-8')));
         }else{
             $errors[] = "你没有输入内容或者输入内容超过1000个字符";
         }
@@ -59,20 +59,21 @@ class Message implements MessageIn
             //将数据插入到数据库
             $pid = $this->parent_id;
             $uid = $this->user_id;
-            $body = $this->body;
+            $pri = $this->primary;
             if (isset($this->subject)){
                 $sbj = $this->subject;
-            }
-            if (isset($sbj)){
-                $q = "INSERT INTO message (parent_id,user, subject, body, send_date) VALUES
-  ($pid,$uid,'$sbj','$body',now())";
             }else{
-                $q = "INSERT INTO message (parent_id,user, body, send_date) VALUES
-  ($pid,$uid,'$body',now())";
+                $sbj = null;
             }
+            if (isset($this->html)){
+                $html = $this->html;
+            }else{
+                $html = null;
+            }
+            $sql = "INSERT INTO message (parent_id, user, subject, primary, html, send_date) VALUES ($pid,$uid,'$sbj','$pri','$html',now())";
             $_mysqli->autocommit(false);
             $_mysqli->begin_transaction();
-            $_mysqli->query($q);
+            $_mysqli->query($sql);
             if ($_mysqli->affected_rows==1){
                 $_mysqli->commit();
                 $_mysqli->autocommit(true);

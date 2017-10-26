@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,6 +17,7 @@
     <script src="../js/readCookie.js"></script>
     <script src="../js/html_checkLogin.js"></script>
     <!--此页所需的功能和样式-->
+    <link rel="stylesheet" href="../css/new-daily.css">
     <script src="../js/newDaily.js"></script>
 </head>
 
@@ -39,62 +40,71 @@
     </div>
 </nav>
 
-<div class="container new-daily">
+<div class="container new-daily" id="daily">
     <div class="row block-title">
         <h2 class="col-md-12">新建工作日报</h2>
+    </div>
+    <div class="row block-subject">
+        <div class="form-group">
+            <label for="inputSubject">标题</label>
+            <input v-model="subject" type="text" class="form-control" id="inputSubject" placeholder="12个以内的中文字符">
+        </div>
+        <div class="form-group">
+            <label for="inputPrimary">摘要</label>
+            <textarea v-model="primary" rows="5" class="form-control" id="inputPrimary" placeholder="请输入摘要"></textarea>
+        </div>
     </div>
     <div class="row editer-content">
         <div id='pad-wrapper'>
             <div id="editparent">
                 <div id='editControls' class='span9' style=' padding:5px;'>
                     <div class='btn-group'>
-                        <a class='btn' data-role='undo' href='#'><i class='icon-undo'></i></a>
-                        <a class='btn' data-role='redo' href='#'><i class='icon-repeat'></i></a>
+                        <a class='btn' title="撤销" data-role='undo' href='#'><i class='icon-undo'></i></a>
+                        <a class='btn' title="恢复" data-role='redo' href='#'><i class='icon-repeat'></i></a>
                     </div>
                     <div class='btn-group'>
-                        <a class='btn' data-role='cut' href='#'><i class='icon-cut'></i></a>
-                        <a class='btn' data-role='copy' href='#'><i class='icon-copy'></i></a>
-                        <a class='btn' data-role='paste' href='#'><i class='icon-paste'></i></a>
+                        <a class='btn' title="剪切" data-role='cut' href='#'><i class='icon-cut'></i></a>
+                        <a class='btn' title="复制" data-role='copy' href='#'><i class='icon-copy'></i></a>
+                        <a class='btn' title="粘贴" data-role='paste' href='#'><i class='icon-paste'></i></a>
                     </div>
                     <div class='btn-group'>
-                        <a class='btn' data-role='bold' href='#'><b>Bold</b></a>
-                        <a class='btn' data-role='italic' href='#'><em>Italic</em></a>
-                        <a class='btn' data-role='underline' href='#'><u><b>U</b></u></a>
-                        <a class='btn' data-role='strikeThrough' href='#'><strike>abc</strike></a>
+                        <a class='btn' title="加粗" data-role='bold' href='#'><b>Bold</b></a>
+                        <a class='btn' title="斜体" data-role='italic' href='#'><em>Italic</em></a>
+                        <a class='btn' title="下划线" data-role='underline' href='#'><u><b>U</b></u></a>
+                        <a class='btn' title="删除线" data-role='strikeThrough' href='#'><strike>abc</strike></a>
                     </div>
                     <div class='btn-group'>
-                        <a class='btn' data-role='justifyLeft' href='#'><i class='icon-align-left'></i></a>
-                        <a class='btn' data-role='justifyCenter' href='#'><i class='icon-align-center'></i></a>
-                        <a class='btn' data-role='justifyRight' href='#'><i class='icon-align-right'></i></a>
-                        <a class='btn' data-role='justifyFull' href='#'><i class='icon-align-justify'></i></a>
+                        <a class='btn' title="左对齐" data-role='justifyLeft' href='#'><i class='icon-align-left'></i></a>
+                        <a class='btn' title="居中对齐" data-role='justifyCenter' href='#'><i class='icon-align-center'></i></a>
+                        <a class='btn' title="右对齐" data-role='justifyRight' href='#'><i class='icon-align-right'></i></a>
+                        <a class='btn' title="两边对齐" data-role='justifyFull' href='#'><i class='icon-align-justify'></i></a>
                     </div>
                     <div class='btn-group'>
-                        <a class='btn' data-role='indent' href='#'><i class='icon-indent-right'></i></a>
-                        <a class='btn' data-role='outdent' href='#'><i class='icon-indent-left'></i></a>
+                        <a class='btn' title="向右缩进" data-role='indent' href='#'><i class='icon-indent-right'></i></a>
+                        <a class='btn' title="向左缩进" data-role='outdent' href='#'><i class='icon-indent-left'></i></a>
                     </div>
                     <div class='btn-group'>
-                        <a class='btn' data-role='insertUnorderedList' href='#'><i class='icon-list-ul'></i></a>
-                        <a class='btn' data-role='insertOrderedList' href='#'><i class='icon-list-ol'></i></a>
+                        <a class='btn' title="无序列表" data-role='insertUnorderedList' href='#'><i class='icon-list-ul'></i></a>
+                        <a class='btn' title="有序列表" data-role='insertOrderedList' href='#'><i class='icon-list-ol'></i></a>
                     </div>
                     <div class='btn-group'>
-                        <a class='btn' data-role='h1' href='#'>h<sup>1</sup></a>
-                        <a class='btn' data-role='h2' href='#'>h<sup>2</sup></a>
-                        <a class='btn' data-role='p' href='#'>p</a>
+                        <a class='btn' title="一级标题" data-role='h1' href='#'>h<sup>1</sup></a>
+                        <a class='btn' title="二级标题" data-role='h2' href='#'>h<sup>2</sup></a>
+                        <a class='btn' title="三级标题" data-role='h3' href='#'>h<sup>3</sup></a>
+                        <a class='btn' title="四级标题" data-role='h4' href='#'>h<sup>4</sup></a>
+                        <a class='btn' title="段落" data-role='p' href='#'>p</a>
                     </div>
                     <div class='btn-group'>
-                        <a class='btn' data-role='subscript' href='#'><i class='icon-subscript'></i></a>
-                        <a class='btn' data-role='superscript' href='#'><i class='icon-superscript'></i></a>
+                        <a class='btn' title="上标" data-role='subscript' href='#'><i class='icon-subscript'></i></a>
+                        <a class='btn' title="下标" data-role='superscript' href='#'><i class='icon-superscript'></i></a>
                     </div>
                 </div>
-                <div id='editor' class='span9' style='' contenteditable>
-                    <h1>世界上最简单的文本编辑器！</h1>
-                    <p>梦想天空博客关注<b>前端开发</b>技术，分享各种增强网站用户体验的 <b>jQuery</b> 插件，展示前沿的 <b>HTML5</b> 和 <b>CSS3</b> 技术应用，推荐优秀的网页设计案例，共享精美的设计素材和优秀的 <b>Web</b> 开发工具，希望这些精心整理的前端技术文章能够帮助到您。</p>
-                </div>
+                <div id='editor' style='' contenteditable></div>
             </div>
         </div>
     </div>
     <div class="row btn-content">
-        <button class="btn btn-primary">提交</button>
+        <button class="btn btn-primary" id="addDaily" v-on:click.prevent="submitData">提交</button>
         <button class="btn btn-warning">取消</button>
     </div>
 </div>
