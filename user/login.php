@@ -8,8 +8,8 @@
 header('Access-Control-Allow-Origin:*');
 header('Content-Type:application/json;charset=UTF-8');
 use \sys_class\User;
+require "../mysqli_connect.php";
 if ($_SERVER['REQUEST_METHOD']=='POST'){
-    require "../mysqli_connect.php";
     spl_autoload_register(function($className){
         $path = str_replace("\\","/","../".$className.".php");
         require "$path";

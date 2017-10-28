@@ -8,7 +8,7 @@
 require '../mysqli_connect.php';
 spl_autoload_register(function ($className){
     $path = str_replace("\\","/","../".$className.".php");
-    require "$path";
+    require "view_message.php";
 });
 use sys_class\message\Message;
 use sys_class\User;

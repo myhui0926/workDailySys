@@ -38,8 +38,8 @@ class Message implements MessageIn
             $errors[] = "数据类型有误，请重试";
         }
 
-        if (isset($_primary) && mb_strlen($_primary,'UTF-8')<1000){
-            $this->primary = $_mysqli->real_escape_string(trim(htmlentities($_primary,ENT_COMPAT,'UTF-8')));
+        if (isset($_primary) && !empty(trim($_primary)) && mb_strlen($_primary,'UTF-8')<1000){
+            $this->primary = $_mysqli->real_escape_string(htmlentities(trim($_primary),ENT_COMPAT,'UTF-8'));
         }else{
             $errors[] = "你没有输入内容或者输入内容超过1000个字符";
         }
@@ -70,7 +70,7 @@ class Message implements MessageIn
             }else{
                 $html = null;
             }
-            $sql = "INSERT INTO message (parent_id, user, subject, primary, html, send_date) VALUES ($pid,$uid,'$sbj','$pri','$html',now())";
+            $sql = "INSERT INTO message (parent_id, user, subject, `primary`, html, send_date) VALUES ($pid,$uid,'$sbj','$pri','$html',now())";
             $_mysqli->autocommit(false);
             $_mysqli->begin_transaction();
             $_mysqli->query($sql);
@@ -101,7 +101,7 @@ class Message implements MessageIn
     {
         // TODO: Implement viewMessage() method.
         if (isset($_user->user_id) && is_numeric($_user->user_id) && isset($_viewUid) && is_numeric($_viewUid)){
-            $sql = "SELECT subject AS sbj ,body AS bo FROM message WHERE user = $_viewUid AND parent_id=0";
+            $sql = "SELECT message_id AS mid, subject AS sbj ,`primary` AS pri FROM message WHERE user = $_viewUid AND parent_id=0";
             $result = $_mysqli->query($sql);
             if ($result->num_rows>0){
                 while($row=$result->fetch_assoc()){

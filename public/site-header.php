@@ -29,9 +29,13 @@
 <nav  class="container c-nav">
     <div class="row">
         <ul class="col-md-3 nav nav-pills">
-            <li role="presentation" class="active"><a href="_index.php">个人首页</a></li>
-            <li role="presentation"><a href="#">查看日报</a></li>
+            <li role="presentation" class="<?php if($isActive == 'index') echo 'active' ?>"><a href="_index.php">个人首页</a></li>
             <li role="presentation"><a href="newDaily.html">新建日报</a></li>
+            <?php
+            if ($isActive=='viewDaily'){
+                echo '<li role="presentation" class="active"><a href="viewDaily.php">查看日报</a></li>';
+            }
+            ?>
         </ul>
         <div class="col-md-5 col-md-offset-4">
             <div class="row user-info">

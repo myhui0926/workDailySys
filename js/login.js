@@ -1,9 +1,9 @@
 $(function(){
     var host = 'http://' + document.domain;
-    var allCookiie = document.cookie;
-    if (allCookiie.indexOf("username")!=-1 && allCookiie.indexOf("user_id")!=-1){
-        window.location.href = host+"/WorkDailySys/user-agent/_index.php";
-    }else{
+        var cookieObj = readCookie();
+        if (cookieObj.user_id && cookieObj.username){
+            window.location.href = host+"/workDailySys/user-agent/_index.php";
+        }
         var loginBox = new Vue({
             el:'#login-box',
             data:{
@@ -21,7 +21,7 @@ $(function(){
                         success:function(response){
                             console.log(response);
                             if(response.status){
-                                let modalBodyText = [];
+                                var modalBodyText = [];
                                 $.each(response.msg,function(index,item){
                                     modalBodyText.push({text:item});
                                 });
@@ -32,7 +32,7 @@ $(function(){
                                     window.location.href = host+"/workDailySys/user-agent/_index.php";
                                 },1000);
                             }else{
-                                let modalBodyText = [];
+                                var modalBodyText = [];
                                 $.each(response.errors,function(index,item){
                                     modalBodyText.push({text:item});
                                 });
@@ -71,5 +71,4 @@ $(function(){
                 }
             }
         });
-    }
 });
