@@ -3,6 +3,7 @@ $site_title="工作日报小demo-首页";
 $page_css_list = array(
   "../css/mainpage.css"
 );
+$isActive = "index";
 include '../public/site-header.php';
 ?>
 <div class="container recentDaily">
@@ -11,9 +12,7 @@ include '../public/site-header.php';
     </div>
         <?php
         use sys_class\message\Message;
-        $result = Message::viewMessage($user,1,$mysqli);
-//        var_dump($result);
-//        var_dump(count($result['msg'],COUNT_NORMAL));
+        $result = Message::viewMessage($user,$user->user_id,$mysqli);
         if ($result['status']){
             $daily_num = count($result['msg']);
             foreach ($result['msg'] as $key=>$m){
@@ -23,7 +22,7 @@ include '../public/site-header.php';
                     echo
                         '<div class="col-md-4">
                     <h3><span>'.($key+1).'</span>'.$m['sbj'].'</h3>
-                    <p>'.$m['bo'].'</p>
+                    <p>'.$m['pri'].'<br><a href="viewDaily.php?mid='.$m['mid'].'">[查看全文]</a></p>
                     <p><span>3</span>条回复<a href="#">查看</a></p>
                 </div>';
                 if (($key+1)%3==0 || ($key+1)==$daily_num){
@@ -31,5 +30,6 @@ include '../public/site-header.php';
                 }
                 }
         }
+        echo '</div>';
 include '../public/site-footer.php';
 ?>

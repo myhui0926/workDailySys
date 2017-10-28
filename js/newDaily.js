@@ -17,7 +17,28 @@ $(function(){
                     dataType:'json',
                     data:{type:'workDaily',subject:_self.subject,primary:_self.primary,html:_self.html},
                     success:function(response){
-                        console.log(response);
+                        if(response.status){
+                            var modalBodyText = [];
+                            $.each(response.msg,function(index,item){
+                                modalBodyText.push({text:item});
+                            });
+                            siteModel.items = modalBodyText;
+                            $('#siteModal').modal('show');
+                            setTimeout(function(){
+                                $('#siteModal').modal('hide');
+                                window.location.reload();
+                            },1000);
+                        }else{
+                            var modalBodyText = [];
+                            $.each(response.errorMsg,function(index,item){
+                               modalBodyText.push({text:item});
+                            });
+                            siteModel.items = modalBodyText;
+                            $('#siteModal').modal('show');
+                            setTimeout(function(){
+                                $('#siteModal').modal('hide');
+                            },10000);
+                        }
                     }
                 });
             },
@@ -51,4 +72,29 @@ $(function(){
             }
         }
     });
+
+    var siteModel = new Vue({
+        el:'#siteModal',
+        data:{
+            items:[],
+            modalHeader:"提交状态",
+            btn1:{
+                text:"关闭",
+                show:true,
+                classList:{
+                    'btn-default':true,
+                    'btn-primary':false
+                }
+            },
+            btn2:{
+                text:"确定",
+                show:false,
+                classList:{
+                    'btn-default':true,
+                    'btn-primary':false
+                }
+            }
+        }
+    });
+
 });
