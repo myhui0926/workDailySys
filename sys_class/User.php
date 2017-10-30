@@ -15,11 +15,58 @@ class User implements UserIn
     public $email = '';
     public $type = 'normal';
     public $regis_date = '';
+    public $depart = 0;
+    public $underling = array();//存储下属的列表
     private static $responseMsg = array(//用于和前台传递数据
         'status'=>true,
         'errors'=>array(),
         'msg'=>array()
     );
+
+    public function __construct($_mysqli)
+    {//新建对象时直接从会话中读取用户信息
+        session_start();
+        if (isset($_SESSION['user_id']) && isset($_COOKIE['user_id']) && isset($_COOKIE['username'])){
+            //说明用户已经登录：
+            //登录成功后，将会话中存储的信息设置为实例的属性：
+            $this->user_id = $_SESSION['user_id'];
+            $this->depart = $_SESSION['depart_id'];
+            $this->username = $_SESSION['username'];
+            $this->email = $_SESSION['email'];
+            $this->type = $_SESSION['type'];
+            $this->regis_date = $_SESSION['regis_date'];
+            if ($this->type!='normal'){//如果用户是管理员，查找其直接管理的下属员工ID：
+                $sql = "SELECT u.user_id AS uid,u.username AS `name`,u.email,u.type,d.name AS depart 
+                            FROM users AS u INNER JOIN department AS d USING (depart_id) ";
+                switch ($this->type) {
+                    case 'boss':
+                        $sql .= "WHERE u.type = 'department'";
+                        break;
+                    case 'department':
+                        $sql .= "WHERE depart_id = this->depart AND type='group";
+                        break;
+                    case 'group':
+                        $sql .= "WHERE depart_id = $this->depart AND type='normal'";
+                        break;
+                    default:
+                        break;
+                }
+                $result = $_mysqli->query($sql);
+                if ($result->num_rows>0){
+                    while($row = $result->fetch_assoc()){
+                        $this->underling[] = $row;
+                    }
+                }else{
+                    $this->underling = array();
+                }
+            }else{
+                $this->underling = array();//普通用户，没有管理任何人
+            }
+        }else{
+            //如果会话中没有用户信息，重定向用户到登录页面
+            self::redirect_user('user/login.html');
+        }
+    }
 
     public static function register($_username,$_email,$_password,$_confirmPass,$_type,$_mysqli)
     {
@@ -93,7 +140,7 @@ class User implements UserIn
         }
 
         if (empty($errors)){
-            $q = "SELECT user_id,username,email,type, regis_date FROM users WHERE email='$em' AND password=sha1('$pa')";
+            $q = "SELECT user_id,depart_id,username,email,type, regis_date FROM users WHERE email='$em' AND password=sha1('$pa')";
             $result = $_mysqli->query($q);
             if ($result->num_rows==1){
                 $row = $result->fetch_assoc();//取出数据
@@ -103,6 +150,7 @@ class User implements UserIn
                 //取出的数据放入会话中
                 session_start();
                 $_SESSION['user_id'] = $row['user_id'];
+                $_SESSION['depart_id'] = $row['depart_id'];
                 $_SESSION['username'] = $row['username'];
                 $_SESSION['email'] = $row['email'];
                 $_SESSION['type'] = $row['type'];
@@ -135,23 +183,6 @@ class User implements UserIn
             session_destroy();//销毁会话变量本身
             setcookie('PHPSESSID','',time()-3600,'/','',0,0);
             self::redirect_user('user/login.html');
-        }
-    }
-
-    public function readUserInfo()
-    {
-        // TODO: Implement readUserInfo() method.
-        session_start();
-        if (!isset($_SESSION['user_id'])){
-            //如果会话中没有用户信息，重定向用户到登录页面
-            self::redirect_user('user/login.html');
-        }else{
-            //登录成功后，将会话中存储的信息设置为实例的属性：
-            $this->user_id = $_SESSION['user_id'];
-            $this->username = $_SESSION['username'];
-            $this->email = $_SESSION['email'];
-            $this->type = $_SESSION['type'];
-            $this->regis_date = $_SESSION['regis_date'];
         }
     }
     private static function redirect_user($_path='_index.html'){

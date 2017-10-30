@@ -13,7 +13,6 @@ spl_autoload_register(function ($className){
 use sys_class\message\Message;
 use sys_class\User;
 $user = new User();
-$user->readUserInfo();
 var_dump($user);
 $result = Message::viewMessage($user,1,$mysqli);
 var_dump($result);

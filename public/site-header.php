@@ -21,8 +21,8 @@
         require "$path";
     });
     use \sys_class\User;
-    $user = new User();
-    $user->readUserInfo();
+    $user = new User($mysqli);
+    var_dump($user);
 ?>
 </head>
 <body>
