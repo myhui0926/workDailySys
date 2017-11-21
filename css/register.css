@@ -1,0 +1,22 @@
+.site-title {
+  margin-top: 100px;
+}
+.site-title h1 {
+  text-align: center;
+}
+.form-box {
+  max-width: 500px;
+  margin: 0 auto;
+}
+.form-box .required {
+  position: relative;
+}
+.form-box .required:after {
+  content: '*';
+  color: #f00;
+  position: absolute;
+  right: -10px;
+  top: 60%;
+}
+
+/*# sourceMappingURL=../maps/register.css.map */

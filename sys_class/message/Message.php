@@ -99,17 +99,19 @@ class Message implements MessageIn
 
     public static function viewMessage(UserIn $_user,$_viewUid,$_mysqli)
     {
-        // TODO: Implement viewMessage() method.
         if (isset($_user->user_id) && is_numeric($_user->user_id) && isset($_viewUid) && is_numeric($_viewUid)){
             $sql = "SELECT m1.message_id AS mid, m1.subject AS sbj ,m1.`primary` AS pri ,count(m2.`primary`) AS reply_num
 FROM message AS m1 LEFT JOIN message AS m2 ON m2.parent_id = m1.message_id
-WHERE m1.user = $_user->user_id AND m1.parent_id=0 GROUP BY m1.message_id";
-            $result = $_mysqli->query($sql);
-            if ($result->num_rows>0){
-                while($row=$result->fetch_assoc()){
-                    self::$responseMsg['msg'][] = $row;
+WHERE m1.user = $_viewUid AND m1.parent_id=0 GROUP BY m1.message_id";
+                $result = $_mysqli->query($sql);
+                if ($result->num_rows>0){
+                    while($row=$result->fetch_assoc()){
+                        self::$responseMsg['msg'][] = $row;
+                    }
+                }else{
+                    self::$responseMsg['status'] = false;
+                    self::$responseMsg['errorMsg'][] = "没有返回数据";
                 }
-            }
         }else{
             self::$responseMsg['status'] = false;
             self::$responseMsg['errorMsg'][] = "用户身份验证失败，请重新登录";

@@ -7,7 +7,7 @@
  */
 $str = "宋朝辉啦啦啦";
 $str2 = "abc456";
-$str3 = "宋朝辉abc";
+$str3 = "宋朝辉vffd啦啦啦abc";
 $str4 = "abcdef";
 echo strlen($str)."<br>";
 echo strlen($str2)."<br>";
@@ -18,9 +18,5 @@ echo mb_strlen($str2,'UTF-8')."<br>";
 echo mb_strlen($str3,'UTF-8')."<br>";
 echo mb_strlen($str4,'UTF-8')."<br>";
 
-$variable = '';
-if (empty($variable)){
-    echo "YES";
-}else{
-    echo "NO";
-}
+echo mb_strcut($str3,0,10,'UTF-8');
+echo mb_substr($str3,0,4,'UTF-8');

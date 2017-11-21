@@ -1,10 +1,9 @@
 .recentDaily {
   margin-top: 20px;
 }
-.recentDaily .block-content .col-md-4 p {
-  min-height: 100px;
-  max-height: 200px;
-  text-overflow: ellipsis;
+.recentDaily .block-content .col-md-4 p:nth-child(2) {
+  height: 100px;
+  overflow-y: hidden;
 }
 .recentDaily .block-content h3 {
   font-size: 18px;

@@ -1,0 +1,21 @@
+.site-title{
+  margin-top: 100px;
+  h1{
+    text-align: center;
+  }
+}
+
+.form-box{
+  max-width: 500px;
+  margin:0 auto;
+  .required{
+    position: relative;
+    &:after{
+      content: '*';
+      color: #f00;
+      position: absolute;
+      right: -10px;
+      top: 60%;
+    }
+  }
+}
