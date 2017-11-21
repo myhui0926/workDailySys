@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    <title>用户注册</title>
+    <!--引入项目所需框架库-->
+    <script src="../lib/jquery-3.2.1.min.js"></script>
+    <script src="../lib/vue/vue.js"></script>
+    <link rel="stylesheet" href="../lib/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../lib/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
+    <script src="../lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <!--站点公用样式与功能-->
+    <script src="../js/readCookie.js"></script>
+    <!--此页所需的功能和样式-->
+    <link rel="stylesheet" href="../css/register.css">
+    <script src="../js/register.js"></script>
+</head>
+<body>
+<div class="container site-title">
+    <div class="row">
+        <h1 class="col-md-12">请注册</h1>
+    </div>
+</div>
+
+<div class="container form-box" id="register-box">
+    <div class="row">
+        <form class="col-md-12" v-on:submit.prevent="submitData">
+            <div class="form-group required" v-bind:class="{'has-success':help_text.username.success,'has-error':help_text.username.error}">
+                <label for="username">请输入姓名</label>
+                <input type="text" id="username" class="form-control" placeholder="请输入姓名" name="username" v-model="username" aria-describedby="helpUsername">
+                <span id="helpUsername" class="help-block">{{help_text.username.text}}</span>
+            </div>
+            <div class="form-group required" v-bind:class="{'has-success':help_text.email.success,'has-error':help_text.email.error}">
+            <label for="email">邮箱：</label>
+            <input type="email" class="form-control" id="email" placeholder="请输入邮件地址" name="email" v-model="email" aria-describedby="helpEmail">
+            <span id="helpEmail" class="help-block">{{help_text.email.text}}</span>
+        </div>
+            <div class="form-group  required" v-bind:class="{'has-success':help_text.type.success,'has-error':help_text.type.error}">
+                <label for="type">用户类型</label>
+                <select name="type" id="type" class="form-control" v-model="type" aria-describedby="helpType">
+                    <option value="pSelect" disabled selected>请选择用户类型</option>
+                    <option value="boss">BOSS</option>
+                    <option value="department">部门经理</option>
+                    <option value="group">小组长</option>
+                    <option value="normal">普通用户</option>
+                </select>
+                <span id="helpType" class="help-block">{{help_text.type.text}}</span>
+            </div>
+            <div class="form-group">
+                <label for="department">所在部门：</label>
+                <select name="department" id="department" class="form-control" v-model="department">
+                    <option value="pSelect" selected disabled>请选择所在部门</option>
+                    <option v-for="depart in departArray" v-bind:key="depart.did" v-bind:value="depart.did">{{depart.dn}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="group">所在小组：</label>
+                <select name="group" id="group" class="form-control" v-model="group" v-bind:disabled="group_disable">
+                    <option value="pSelect" disabled selected>请选择所在小组</option>
+                    <option v-for="group in groupArray" v-bind:key="group.gid" v-bind:value="group.gid">{{group.gn}}</option>
+                </select>
+            </div>
+            <div class="form-group  required" v-bind:class="{'has-success':help_text.password.success,'has-error':help_text.password.error}">
+                <label for="password">密码：</label>
+                <input name="password" type="password" class="form-control" id="password" placeholder="请输入密码" v-model="password" aria-describedby="helpPass">
+                <span id="helpPass" class="help-block">{{help_text.password.text}}</span>
+            </div>
+            <div class="form-group  required" v-bind:class="{'has-success':help_text.confirmPassword.success,'has-error':help_text.confirmPassword.error}">
+                <label for="confirm-password">确认密码：</label>
+                <input name="confirm-password" type="password" class="form-control" id="confirm-password" placeholder="请再次输入密码" v-model="confirm_password" aria-describedby="helpConfirmPass">
+                <span id="helpConfirmPass" class="help-block">{{help_text.confirmPassword.text}}</span>
+            </div>
+            <button type="submit" class="btn btn-default">提交</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

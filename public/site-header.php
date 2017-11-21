@@ -22,7 +22,6 @@
     });
     use \sys_class\User;
     $user = new User($mysqli);
-    var_dump($user);
 ?>
 </head>
 <body>
@@ -33,7 +32,9 @@
             <li role="presentation"><a href="newDaily.html">新建日报</a></li>
             <?php
             if ($isActive=='viewDaily'){
-                echo '<li role="presentation" class="active"><a href="viewDaily.php">查看日报</a></li>';
+                echo '<li role="presentation" class="active"><a href="viewDaily.php?mid='.$_GET['mid'].'">查看日报</a></li>';
+            }elseif ($isActive=='viewPersonPage'){
+                echo '<li role="presentation" class="active"><a href="person-page.php?uid='.$_GET['uid'].'&viewUid='.$_GET['viewUid'].'">用户主页</a></li>';
             }
             ?>
         </ul>

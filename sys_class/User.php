@@ -16,8 +16,11 @@ class User implements UserIn
     public $type = 'normal';
     public $regis_date = '';
     public $depart = 0;
+    public $depart_name = '';
+    public $group = 0;
+    public $group_name = '';
     public $underling = array();//存储下属的列表
-    private static $responseMsg = array(//用于和前台传递数据
+    protected static $responseMsg = array(//用于和前台传递数据
         'status'=>true,
         'errors'=>array(),
         'msg'=>array()
@@ -31,51 +34,63 @@ class User implements UserIn
             //登录成功后，将会话中存储的信息设置为实例的属性：
             $this->user_id = $_SESSION['user_id'];
             $this->depart = $_SESSION['depart_id'];
+            $this->group = $_SESSION['group_id'];
             $this->username = $_SESSION['username'];
             $this->email = $_SESSION['email'];
             $this->type = $_SESSION['type'];
             $this->regis_date = $_SESSION['regis_date'];
-            if ($this->type!='normal'){//如果用户是管理员，查找其直接管理的下属员工ID：
-                $sql = "SELECT u.user_id AS uid,u.username AS `name`,u.email,u.type,d.name AS depart 
-                            FROM users AS u INNER JOIN department AS d USING (depart_id) ";
-                switch ($this->type) {
-                    case 'boss':
-                        $sql .= "WHERE u.type = 'department'";
-                        break;
-                    case 'department':
-                        $sql .= "WHERE depart_id = this->depart AND type='group";
-                        break;
-                    case 'group':
-                        $sql .= "WHERE depart_id = $this->depart AND type='normal'";
-                        break;
-                    default:
-                        break;
-                }
-                $result = $_mysqli->query($sql);
-                if ($result->num_rows>0){
-                    while($row = $result->fetch_assoc()){
-                        $this->underling[] = $row;
-                    }
-                }else{
-                    $this->underling = array();
-                }
-            }else{
-                $this->underling = array();//普通用户，没有管理任何人
-            }
+            $this->searchUnderling($_mysqli);
         }else{
             //如果会话中没有用户信息，重定向用户到登录页面
             self::redirect_user('user/login.html');
         }
     }
 
-    public static function register($_username,$_email,$_password,$_confirmPass,$_type,$_mysqli)
+    protected function searchUnderling($_mysqli){
+        if ($this->type!='normal'){//如果用户是管理员，查找其直接管理的下属员工ID：
+            $sql = "";
+            switch ($this->type){
+                case 'boss':
+                    $sql = "SELECT u.user_id AS uid,u.username AS `name`,u.email,u.type,d.name AS depart
+FROM users AS u INNER JOIN department AS d USING (depart_id)
+WHERE u.type = 'department'";
+                    break;
+                case 'department':
+                    $sql = "SELECT u.user_id AS uid,u.username AS `name`,u.email,u.type,g.name AS `group`,d.name AS depart
+FROM users AS u INNER JOIN `group` AS g ON u.group_id = g.group_id
+INNER JOIN department AS d ON u.depart_id = d.depart_id
+WHERE u.type = 'group' AND u.depart_id =$this->depart";
+                    break;
+                case 'group':
+                    $sql .= "SELECT u.user_id AS uid,u.username AS `name`,u.email,u.type,g.name AS `group`,d.name AS depart
+FROM users AS u INNER JOIN `group` AS g ON u.group_id = g.group_id
+INNER JOIN department AS d ON u.depart_id  = d.depart_id
+WHERE u.type = 'normal' AND u.group_id = $this->group";
+                    break;
+                default:
+                    break;
+            }
+            $result = $_mysqli->query($sql);
+            if ($result->num_rows>0){
+                while($row = $result->fetch_assoc()){
+                    $this->underling[] = $row;
+                }
+            }else{
+                $this->underling = array();
+            }
+        }else{
+            $this->underling = array();//普通用户，没有管理任何人
+        }
+    }
+
+    public static function register($_username,$_email,$_type,$_department,$_group,$_password,$_confirmPass,$_mysqli)
     {
         $errors = array();//存储错误数据
         // TODO: Implement register() method.
         if (isset($_username) && preg_match('/^[\x{4e00}-\x{9fa5}]{2,5}$/u',$_username)){
             $un = $_mysqli->real_escape_string(trim(htmlentities($_username,ENT_COMPAT,'UTF-8')));
         }else{
-            $errors[] = "请输入合法的用户姓名（3-5个汉字）";
+            $errors[] = "请输入合法的用户姓名（2-5个汉字）";
         }
 
         if (isset($_email) && preg_match('/^[\w.-]+@[\w.-]+\.[A-Za-z]{2,6}$/',$_email)){
@@ -84,7 +99,7 @@ class User implements UserIn
             $errors[] = "请输入合法的邮箱地址";
         }
 
-        if (isset($_password) && preg_match('/\w{6,16}/',$_password)){
+        if (isset($_password) && preg_match('/^.{6,16}$/',$_password)){
             if ($_password==$_confirmPass){
                 $p = $_mysqli->real_escape_string(trim($_password));
             }else{
@@ -140,7 +155,7 @@ class User implements UserIn
         }
 
         if (empty($errors)){
-            $q = "SELECT user_id,depart_id,username,email,type, regis_date FROM users WHERE email='$em' AND password=sha1('$pa')";
+            $q = "SELECT user_id,depart_id,group_id,username,email,type, regis_date FROM users WHERE email='$em' AND password=sha1('$pa')";
             $result = $_mysqli->query($q);
             if ($result->num_rows==1){
                 $row = $result->fetch_assoc();//取出数据
@@ -151,6 +166,7 @@ class User implements UserIn
                 session_start();
                 $_SESSION['user_id'] = $row['user_id'];
                 $_SESSION['depart_id'] = $row['depart_id'];
+                $_SESSION['group_id'] = $row['group_id'];
                 $_SESSION['username'] = $row['username'];
                 $_SESSION['email'] = $row['email'];
                 $_SESSION['type'] = $row['type'];
@@ -190,5 +206,20 @@ class User implements UserIn
         $url = 'http://'.$_SERVER['HTTP_HOST']."/workDailySys/".$_path;
         header("Location:$url");
         exit();
+    }
+
+    public static function companyStructure($_mysqli){
+        //用于返回公司的整个组织结构:
+        $sql = "SELECT d.depart_id AS did,d.name AS dn,g.group_id AS gid,g.name AS gn FROM department AS d LEFT JOIN `group` AS g USING (depart_id) ORDER BY did";
+        $result = $_mysqli->query($sql);
+        if ($result->num_rows>0){
+            while($row = $result->fetch_assoc()){
+                self::$responseMsg['msg'][] = $row;
+            }
+        }else{
+            self::$responseMsg['status'] = false;
+            self::$responseMsg['errors'][] = "系统错误";
+        }
+        return self::$responseMsg;
     }
 }

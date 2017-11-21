@@ -22,13 +22,17 @@ include '../public/site-header.php';
                     echo
                         '<div class="col-md-4">
                     <h3><span>'.($key+1).'</span>'.$m['sbj'].'</h3>
-                    <p>'.$m['pri'].'<br></p>
+                    <p>'.mb_strcut($m['pri'],0,300,'UTF-8').'...<br></p>
                     <p><span>'.$m['reply_num'].'</span>条回复 <a href="viewDaily.php?mid='.$m['mid'].'">[查看全文]</a><a href="editDaily.php?mid='.$m['mid'].'">[编辑日报]</a></p>
                 </div>';
                 if (($key+1)%3==0 || ($key+1)==$daily_num){
                     echo '</div>';
                 }
                 }
+        }else{
+            foreach ($result['errorMsg'] as $e){
+                echo '<p class="text-danger">'.$e.'</p>';
+            }
         }
         ?>
 </div>
@@ -47,6 +51,7 @@ include '../public/site-header.php';
                     <div class="col-md-4">
                 <h3>'.$ul['name'].'</h3>
                 <p>'.$ul['depart'].'</p>
+                <p>'.(empty($ul['group']) ? '没有分组' : $ul['group']).'</p>
                 <p>'.$ul['email'].'</p>
                 <p>'.$ul['type'].'</p>
                 <p><a href="person-page.php?uid='.$user->user_id.'&viewUid='.$ul['uid'].'">查看</a></p>
